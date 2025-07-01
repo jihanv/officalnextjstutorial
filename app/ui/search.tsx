@@ -5,11 +5,18 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 
 export default function Search({ placeholder }: { placeholder: string }) {
+  // Grab the current query parameters from the URL so your component can use them.
   const searchParams = useSearchParams();
+
   const pathname = usePathname();
+
+  // gets the replace() function from Next.js’s router.
+  // Changes the URL in the browser address bar without reloading the page
   const { replace } = useRouter();
 
   function handleSearch(term: string) {
+
+    // makes a mutable copy of the query parameters.
     const params = new URLSearchParams(searchParams);
 
     if (term) {
