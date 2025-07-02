@@ -20,6 +20,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     // makes a mutable copy of the query parameters.
     const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
 
     if (term) {
       params.set('query', term);
