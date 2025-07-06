@@ -1,5 +1,7 @@
 "use server";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
+import { redirect } from 'next/navigation';
 import postgres from "postgres";
 
 /**
@@ -7,8 +9,7 @@ import postgres from "postgres";
  * The `ssl: 'require'` option ensures the connection is encrypted.
  * This `sql` object is used to run queries against the database.
  */
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
-
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 // You define a schema with zod:
 const FormSchema = z.object({
@@ -45,4 +46,13 @@ export async function createInvoice(formData: FormData) {
     INSERT INTO invoices (customer_id, amount, status, date)
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
   `;
+
+  /**
+   * Revalidate the cache for the invoices page so users see the newly created invoice immediately.
+   * This clears any stale cached HTML or data for the specified path.
+   */
+  revalidatePath("/dashboard/invoices");
+
+    redirect('/dashboard/invoices');
+
 }
