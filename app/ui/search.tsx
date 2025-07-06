@@ -27,6 +27,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     } else {
       params.delete('query');
     }
+    // Change the url in the browser with params
     replace(`${pathname}?${params.toString()}`);
   }, 300)
 
